@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Healthcare CTF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Healthcare CTF</h1>
+        <p>Welcome to our healthcare CTF. Complete each challenge to progress to the next.</p>
+
+        <div class="challenge {{ 'completed' if 'sql_injection' in session.get('completed_challenges', []) else '' }}">
+            <h2>Challenge 1: SQL Injection</h2>
+            <p>Find the flag to proceed.</p>
+            {% if 'sql_injection' in session.get('completed_challenges', []) %}
+                <p>Challenge Completed! <a href="{{ url_for('xxe') }}" class="cta">Next Challenge</a></p>
+            {% else %}
+                <a href="{{ url_for('sql_injection') }}" class="cta">Start Challenge</a>
+            {% endif %}
+        </div>
+
+        {% if 'sql_injection' in session.get('completed_challenges', []) %}
+        <div class="challenge {{ 'completed' if 'xxe' in session.get('completed_challenges', []) else '' }}">
+            <h2>Challenge 2: XXE Vulnerability</h2>
+            <p>Find the flag to proceed.</p>
+            {% if 'xxe' in session.get('completed_challenges', []) %}
+                <p>Challenge Completed! <a href="{{ url_for('lfi') }}" class="cta">Next Challenge</a></p>
+            {% else %}
+                <a href="{{ url_for('xxe') }}" class="cta">Start Challenge</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if 'xxe' in session.get('completed_challenges', []) %}
+        <div class="challenge {{ 'completed' if 'lfi' in session.get('completed_challenges', []) else '' }}">
+            <h2>Challenge 3: Local File Inclusion (LFI)</h2>
+            <p>Find the flag to proceed.</p>
+            {% if 'lfi' in session.get('completed_challenges', []) %}
+                <p>Challenge Completed! <a href="{{ url_for('rce') }}" class="cta">Next Challenge</a></p>
+            {% else %}
+                <a href="{{ url_for('lfi') }}" class="cta">Start Challenge</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if 'lfi' in session.get('completed_challenges', []) %}
+        <div class="challenge {{ 'completed' if 'rce' in session.get('completed_challenges', []) else '' }}">
+            <h2>Challenge 4: Remote Code Execution (RCE)</h2>
+            <p>Find the flag to complete the CTF.</p>
+            {% if 'rce' in session.get('completed_challenges', []) %}
+                <p>Challenge Completed! Congratulations!</p>
+            {% else %}
+                <a href="{{ url_for('rce') }}" class="cta">Start Challenge</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
